@@ -1,0 +1,44 @@
+#!/usr/bin/env python3   各班排名情况处理
+import sys
+from xlrd import open_workbook, xldate_as_tuple
+from xlwt import Workbook
+
+input_file = sys.argv[1]
+my_columns = [0]     #班级信息在第一列即为0
+class1_ranking = []   #一班各同学在年级中的排名，下同
+class1_num = 0        #一班总人数，下同
+class2_ranking = []
+class2_num = 0
+class3_ranking = []
+class3_num = 0
+class4_ranking = []
+class4_num = 0
+with open_workbook(input_file) as workbook:    #打开目标文件
+    worksheet = workbook.sheet_by_name('Sheet1')    #打开目标工作页
+    for row_index in range(3,worksheet.nrows):  # row是行
+        for column_index in my_columns:  # column是列
+            cell_value = worksheet.cell_value(row_index, column_index)  #按行列位置提取格中的值
+            if cell_value.endswith('1'):    #如果是一班就是“计科1701”
+                class1_num+=1               #班级人数加一
+                class1_ranking.append(row_index-2)  #班级增加一个新名次
+            elif cell_value.endswith('2'):
+                class2_num+=1
+                class2_ranking.append(row_index-2)
+            elif cell_value.endswith('3'):
+                class3_num += 1
+                class3_ranking.append(row_index - 2)
+            elif cell_value.endswith('4'):
+                class4_num += 1
+                class4_ranking.append(row_index - 2)
+print('一班人数',class1_num)
+print('二班人数',class2_num)
+print('三班人数',class3_num)
+print('四班人数',class4_num)
+print('一班年级名次',class1_ranking)
+print('二班年级名次',class2_ranking)
+print('三班年级名次',class3_ranking)
+print('四班年级名次',class4_ranking)
+print('一班名次中位数：',class1_ranking[int(class1_num/2)])
+print('二班名次中位数：',class2_ranking[int(class2_num/2)])
+print('三班名次中位数：',class3_ranking[int(class3_num/2)])
+print('四班名次中位数：',class4_ranking[int(class4_num/2)])
